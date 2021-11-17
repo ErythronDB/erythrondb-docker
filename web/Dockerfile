@@ -32,7 +32,9 @@ ENV PATH $PATH:$GUS_HOME/bin:$PROJECT_HOME/install/bin
 
 ADD web/config/webapp.prop $SITE_HOME/conf/webapp.prop
 
-RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
+# https://www.topzenith.com/2020/07/http-status-404-not-found-docker-tomcat-image.html
+RUN rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HOME/webapps && \
+    cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     ln -s $GUS_HOME/lib/java/db_driver/postgresql-42.2.14.jar $CATALINA_HOME/lib/postgresql-42.2.14.jar && \
     bldw ErythronDBWebsite $SITE_HOME/conf/webapp.prop
 #&& \ rm -rf $PROJECT_HOME 
