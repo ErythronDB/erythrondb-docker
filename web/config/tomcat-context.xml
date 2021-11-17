@@ -1,0 +1,8 @@
+<Context path="/erythrondb"
+         docBase="/www/erythrondb/webapp"
+         swallowOutput="true"
+         privileged="false" >
+  <Parameter name="model" value="ErythronDB"/>
+  <Resources allowLinking="true" />
+  <Manager pathname="" />
+</Context>

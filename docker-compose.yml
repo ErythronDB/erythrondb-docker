@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  erythrondb-web:
+    ports:
+      - '8082:8080'
+    build:
+      args:
+        GUS_HOME: ${GUS_HOME}
+        PROJECT_HOME: ${PROJECT_HOME}
+      context: .
+      dockerfile: web/Dockerfile
+    environment:
+      GUS_HOME: ${GUS_HOME}
+      PROJECT_HOME: ${PROJECT_HOME}
+      ADDITIONAL_PATH: ${GUS_HOME}/bin
+  
