@@ -3,9 +3,9 @@
 <modelConfig modelName="ErythronDB"
              webServiceUrl="local"
              smtpServer="127.0.0.1"
-             supportEmail="erythron@mail.med.upenn.edu"
-             adminEmail="allenem@pennmedicine.upenn.edu"
-             secretKeyFile="/www/common/.erythrondb_wdk_key"
+             supportEmail="erythrondb@gmail.com"
+             adminEmail="erythrondb@gmail.com"
+             secretKeyFile="/www/common/secret/.wdk_key"
              wdkTempDir="/www/common/temp"
              >
 
@@ -15,7 +15,7 @@
              />
 
     <appDb  login="erythrondb"
-            password="erythrondb2018"
+            password=""
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
@@ -30,7 +30,7 @@
             />
 
     <userDb login="erythrondb"
-            password="erythrondb2018"
+            password=""
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
@@ -45,7 +45,7 @@
             />
 
     <accountDb login="erythrondb"
-            password="erythrondb2018"
+            password=""
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"

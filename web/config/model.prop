@@ -5,7 +5,7 @@ HIDE_PRIVATE_DATA=true
 
 WEBAPP=ErythronDB
 
-SITE_ADMIN_EMAIL=allenem@pennmedicine.upenn.edu
+SITE_ADMIN_EMAIL=erythrondb@gmail.com
 
 STEP_ANALYSIS_JOB_DIR=/www/common/temp
 
