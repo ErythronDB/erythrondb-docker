@@ -4,14 +4,15 @@ services:
   erythrondb-web:
     ports:
       - '8082:8080'
+      - '5432:5432'
     build:
-      args:
-        GUS_HOME: ${GUS_HOME}
-        PROJECT_HOME: ${PROJECT_HOME}
       context: .
       dockerfile: web/Dockerfile
+    volumes:
+      - ${DOWNLOADS}:/www/erythrondb/project_home
+      - ${LOG}:/usr/local/tomcat/logs
     environment:
-      GUS_HOME: ${GUS_HOME}
-      PROJECT_HOME: ${PROJECT_HOME}
-      ADDITIONAL_PATH: ${GUS_HOME}/bin
-  
+      DOWNLOADS: ${DOWNLOADS}
+      LOG: ${LOG}
+      DB_DATA: ${DB_DATA}
+     
