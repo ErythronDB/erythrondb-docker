@@ -20,7 +20,7 @@ RUN git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/WDK.git && 
     git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/install.git && \
     git clone --depth 1 -b api-build-50 https://github.com/VEuPathDB/CBIL.git && \
     git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/WSF.git && \
-    git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/FgpUtil.git && \
+    git clone --depth 1 -b api-build-50 https://github.com/ErythronDB/FgpUtil.git && \
     git clone --depth 1 -b api-build-50 https://github.com/VEuPathDB/ReFlow.git && \
     git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/EbrcModelCommon.git && \
     git clone --depth 1 -b api-build-50 https://github.com/VEupathDB/EbrcWebsiteCommon.git && \
