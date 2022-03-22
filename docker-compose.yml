@@ -1,18 +1,36 @@
-version: '3.9'
+version: '3.3'
 
 services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ${DB_INIT}:/docker-entrypoint-initdb.d/erythrondb.sql.gz
+      # - ./init.sql:/docker-entrypoint-initdb.d/
+      - database_data:${DB_DATA}
+
+
+
   erythrondb-web:
     ports:
       - '8082:8080'
-      - '5432:5432'
     build:
       context: .
       dockerfile: web/Dockerfile
     volumes:
       - ${DOWNLOADS}:/www/erythrondb/project_home
       - ${LOG}:/usr/local/tomcat/logs
+    links:
+      - db
     environment:
       DOWNLOADS: ${DOWNLOADS}
       LOG: ${LOG}
-      DB_DATA: ${DB_DATA}
+      PG_HOST: 'db'
+
+volumes:
+  database_data:
+    driver: local
+      
      
