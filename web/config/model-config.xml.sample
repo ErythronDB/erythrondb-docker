@@ -14,8 +14,8 @@
              slow="2"
              />
 
-    <appDb  login="erythrondb"
-            password=""
+    <appDb  login="@POSTGRES_USER@"
+            password="@POSTGRES_PASSWORD@"
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
@@ -29,8 +29,8 @@
             userDbLink=""
             />
 
-    <userDb login="erythrondb"
-            password=""
+    <userDb login="@POSTGRES_USER@"
+            password="@POSTGRES_PASSWORD@"
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
@@ -44,8 +44,8 @@
 
             />
 
-    <accountDb login="erythrondb"
-            password=""
+    <accountDb login="@POSTGRES_USER@"
+            password="@POSTGRES_PASSWORD@"
             connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
@@ -71,7 +71,7 @@
         <![CDATA[
         <p>Thank you for registering at ErythronDB.</p>
         <p>Your temporary password is: $$PASSWORD$$</p>
-        <p>You may now login to <a href="http://www.cbil.upenn.edu/ErythronDB_alpha">ErythronDB (alpha)</a>.</p>
+        <p>You may now login to <a href="@SITE_URL@">ErythronDB</a>.</p>
 
         <p>Thank you,</p>
         <p>ErythronDB Support Team</p>
