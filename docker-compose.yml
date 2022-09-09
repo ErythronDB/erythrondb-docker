@@ -6,14 +6,16 @@ services:
     container_name: erythrondb-db
     restart: always
     ports:
-      - 5432:5432
-    volumes:
-      - ${DB_DATA}:/var/lib/postgresql/data
-      - ${DB_INIT}:/docker-entrypoint-initdb.d/init.sql.gz
+      - ${DB_PORT}:5432
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # note - db will not initialize if DB_DATA directory already exists
+      - ${DB_DATA}:/var/lib/postgresql/data
+      - ${DB_INIT}:/docker-entrypoint-initdb.d/init.sql.gz
+
 
 
   web:

@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y git maven nodejs npm ant python3-pip &&
 # Python Modules 
 # -------------------------------------------------
 RUN pip3 install --no-cache-dir  \
-    pandas scipy statsmodel wordcloud numpy seaborn
+    pandas scipy statsmodels wordcloud numpy seaborn
 
 RUN mkdir -p $SITE_HOME/conf $SITE_HOME/gus_home/config $SITE_HOME/webapp \ 
     $SITE_HOME/cgi-bin $SITE_HOME/cgi-lib $SITE_HOME/htdocs \
@@ -53,6 +53,6 @@ RUN rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HO
 ADD web/config/tomcat-context.xml $CATALINA_HOME/conf/Catalina/localhost/ErythronDB.xml
 ADD web/config/model.prop $GUS_HOME/config/ErythronDB/model.prop
 ADD web/config/model-config.xml $GUS_HOME/config/ErythronDB/model-config.xml
-ADD web/config/wdk_key $COMMON_DIR/secret/.erythrondb_wdk_key
+ADD web/config/wdk_key $COMMON_DIR/secret/.wdk_key
 
 
