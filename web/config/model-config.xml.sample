@@ -16,7 +16,7 @@
 
     <appDb  login="@POSTGRES_USER@"
             password="@POSTGRES_PASSWORD@"
-            connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
+            connectionUrl="jdbc:postgresql://db:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
             maxIdle="10"
@@ -31,7 +31,7 @@
 
     <userDb login="@POSTGRES_USER@"
             password="@POSTGRES_PASSWORD@"
-            connectionUrl="jdbc:postgresql://localhost:5432/erythtst"
+            connectionUrl="jdbc:postgresql://db:5432/erythtst"
             platform="PostgreSQL"
             maxActive="20"
             maxIdle="1"
