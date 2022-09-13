@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM tomcat:jdk11-adoptopenjdk-hotspot
+# FROM tomcat:jdk11-adoptopenjdk-hotspot
+FROM tomcat:9.0.65-jdk11-temurin-jammy
 
 ENV SITE_HOME=/www/erythrondb
 ENV COMMON_DIR=/www/common
