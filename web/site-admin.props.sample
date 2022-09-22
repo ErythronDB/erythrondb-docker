@@ -1,0 +1,14 @@
+# Site Admin Args needed by the container to generate config files for the GenomicsDB websites
+SITE_ADMIN_EMAIL=me@mail.com
+SECRET_KEY=erythrondb-secret-key-for-encoding-login-cookie
+SITE_DOMAIN=public-facing-site-domain 
+# e.g., cbil.upenn.edu
+GOOGLE_ANALYTICS_ID=NA
+
+# database
+WEB_DB_NAME=database-name
+
+WEB_DB_USER=erythrondb
+WEB_DB_PASSWORD=pg-web-user-password
+
+
