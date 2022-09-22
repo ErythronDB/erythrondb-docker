@@ -3,6 +3,7 @@ model-config.xml
 wdk_key
 .env
 site-admin.props
+Dockerfile-with-ARGs
 
 # -*- mode: gitignore; -*-
 *~
