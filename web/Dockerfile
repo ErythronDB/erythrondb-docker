@@ -16,7 +16,7 @@ ENV PROJECT_HOME=/www/erythrondb/project_home
 # allow the build container to cache directories for apt
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked && \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y git maven nodejs npm ant python3-pip 
     # clean up temp directories
 	#&& apt-get clean && apt-get purge && \

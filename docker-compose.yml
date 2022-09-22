@@ -10,19 +10,19 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_INIT_USER}
       POSTGRES_PASSWORD: ${POSTGRES_INIT_PASSWORD}
-      # POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: init-ignore
     volumes:
       # note - db will not initialize if DB_DATA directory already exists
-      - ${DB_DATA}:/var/lib/postgresql/data
       - ${DB_INIT}:/docker-entrypoint-initdb.d/init.sql.gz
-      
+      - ${DB_DATA}:/var/lib/postgresql/data
+
   web:
     container_name: erythrondb-web
     build:
       args:
-        TOMCAT_PORT=${TOMCAT_PORT}
-        WEB_DB_PORT=${DB_PORT}
-        WEB_DB_HOST=db
+        TOMCAT_PORT: ${TOMCAT_PORT}
+        WEB_DB_PORT: ${DB_PORT}
+        WEB_DB_HOST: db
       context: .
       dockerfile: ./web/Dockerfile-with-ARGs
       target: base
