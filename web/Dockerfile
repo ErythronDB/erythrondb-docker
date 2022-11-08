@@ -3,8 +3,11 @@
 # FROM tomcat:jdk11-adoptopenjdk-hotspot
 FROM tomcat:9.0.65-jdk11-temurin-jammy as base
 
+# ARGs that can be overload from command line or in the docker-compose.yaml
 ARG WEBAPP=ErythronDB
 ARG PROJECT_ID=ErythronDB
+ARG BUILD
+ARG DB_HOST
 
 ENV SITE_HOME=/www/erythrondb
 ENV COMMON_DIR=/www/common
@@ -14,19 +17,16 @@ ENV PROJECT_HOME=/www/erythrondb/project_home
 # install build dependencies
 # TODO: specify versions for maven, nodejs, npm?
 # allow the build container to cache directories for apt
-RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && apt-get install -y git maven nodejs npm ant python3-pip 
+
+RUN apt-get update && apt-get install -y git maven nodejs npm ant python3-pip \
     # clean up temp directories
-	#&& apt-get clean && apt-get purge && \
-	#rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	&& apt-get clean && apt-get purge && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Python Modules 
 # -------------------------------------------------
 RUN pip3 install --no-cache-dir  \
     pandas scipy statsmodels wordcloud numpy seaborn
-
 
 FROM base AS initialize-env
 
@@ -51,16 +51,6 @@ WORKDIR $SITE_HOME
 ENV PATH $PATH:$GUS_HOME/bin:$PROJECT_HOME/install/bin
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
-RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
-    # . == source
-    . $PROJECT_HOME/install/bin/gusEnv.bash && \
-    # set webapp properties
-    cp $PROJECT_HOME/ErythronDBWebsite/Site/config/webapp.prop.sample $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@WEBAPP@|$WEBAPP|g" $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@PROJECT_ID@|$PROJECT_ID|g" $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@GOOGLE_ANALYTICS_ID@|$GOOGLE_ANALYTICS_ID|g" $GUS_HOME/config/webapp.prop        
-    # TODO: add production build flag to webapp.prop if $BUILD == "prod"
-
 
 # Build Website
 # -------------------------------------------------
@@ -71,11 +61,29 @@ RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
 
 FROM initialize-env as build-web
 
+RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
+    # . == source
+    . $PROJECT_HOME/install/bin/gusEnv.bash && \
+    # set webapp properties
+    cp $PROJECT_HOME/ErythronDBWebsite/Site/config/webapp.prop.sample $GUS_HOME/config/webapp.prop && \
+    sed -i "s|@WEBAPP@|$WEBAPP|g" $GUS_HOME/config/webapp.prop && \
+    sed -i "s|@PROJECT_ID@|$PROJECT_ID|g" $GUS_HOME/config/webapp.prop && \
+    sed -i "s|@GOOGLE_ANALYTICS_ID@|$GOOGLE_ANALYTICS_ID|g" $GUS_HOME/config/webapp.prop        
+    # TODO: add production build flag to webapp.prop if $BUILD == "prod"
+
 RUN --mount=type=cache,target=/root/.m2 \
     bldw ErythronDBWebsite $GUS_HOME/config/webapp.prop && \
     rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HOME/webapps && \
-    ln -s $GUS_HOME/lib/java/db_driver/postgresql-42.2.14.jar $CATALINA_HOME/lib/postgresql-42.2.14.jar \
+    cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/.  \
     && if [$BUILD = "prod"]; then rm -r $PROJECT_HOME; fi
+
+
+FROM build-web as site-admin-config
+
+# for debug purposes or testing out config; prevents caching of this final stage
+# so that docker build will always rebuild
+# may break in future b/c no guarantee URL will persist. 
+# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 RUN echo "Creating/modifying configuration files" && \
     # secret key file for cookie-based authentication
@@ -89,12 +97,19 @@ RUN echo "Creating/modifying configuration files" && \
     cp $GUS_HOME/config/model-config.xml.sample $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@MODEL@|${PROJECT_ID}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@SITE_ADMIN_EMAIL@|${SITE_ADMIN_EMAIL}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@WEB_DB_USER@|${DB_WEB_USER}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@WEB_DB_PASSWORD@|${DB_WEB_PASSWORD}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@WEB_DB_HOST@|${DB_HOST}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@WEB_DB_PORT@|${DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@WEB_DB_NAME@|${DB_NAME}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \ 
+    sed -i "s|@DB_USER@|${WEB_DB_USER}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
+    sed -i "s|@DB_PASSWORD@|${WEB_DB_PASSWORD}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
+    sed -i "s|@DB_HOST@|${DB_HOST}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
+    sed -i "s|@DB_PORT@|${WEB_DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
+    sed -i "s|@DB_NAME@|${WEB_DB_NAME}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \ 
     # tomcat-context.xml
     cp $GUS_HOME/config/tomcat-context.xml.sample $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
     sed -i "s|@MODEL@|${PROJECT_ID}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
-    sed -i "s|@WEBAPP@|${WEBAPP}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml 
+    sed -i "s|@WEBAPP@|${WEBAPP}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
+    # move an older version of log4j needed to generate ontology files/raml but causes version conflicts
+    # and method not found issues in the FgpUtil
+    && mkdir $GUS_HOME/lib/java/deprecated && mv $GUS_HOME/lib/java/log4j-1.2.17.jar $GUS_HOME/lib/java/deprecated/. && \
+    # tomcat-users.xml
+    cp $GUS_HOME/config/tomcat-users.xml.sample $CATALINA_HOME/conf/tomcat-users.xml && \
+    sed -i "s|@TOMCAT_MANAGER_PASSWORD@|$TOMCAT_MANAGER_PASSWORD|g" $CATALINA_HOME/conf/tomcat-users.xml && \
+    cp $GUS_HOME/config/tomcat-manager-context.xml $CATALINA_HOME/webapps/manager/META-INF/context.xml

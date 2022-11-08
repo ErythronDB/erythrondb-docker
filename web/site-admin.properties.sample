@@ -11,4 +11,5 @@ WEB_DB_NAME=database-name
 WEB_DB_USER=erythrondb
 WEB_DB_PASSWORD=pg-web-user-password
 
+TOMCAT_MANAGER_PASSWORD=s3cret
 

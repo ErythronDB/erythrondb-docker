@@ -2,7 +2,7 @@
 model-config.xml
 wdk_key
 .env
-site-admin.props
+*.properties
 Dockerfile-with-ARGs
 
 # -*- mode: gitignore; -*-
