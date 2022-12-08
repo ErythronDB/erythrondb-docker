@@ -6,8 +6,8 @@ FROM tomcat:9.0.65-jdk11-temurin-jammy as base
 # ARGs that can be overload from command line or in the docker-compose.yaml
 ARG WEBAPP=ErythronDB
 ARG PROJECT_ID=ErythronDB
-ARG BUILD
-ARG DB_HOST
+ARG DB_HOST=db
+ARG SECRET_KEY=placeholder-key
 
 ENV SITE_HOME=/www/erythrondb
 ENV COMMON_DIR=/www/common
@@ -15,17 +15,13 @@ ENV GUS_HOME=/www/erythrondb/gus_home
 ENV PROJECT_HOME=/www/erythrondb/project_home
 
 # install build dependencies
-# TODO: specify versions for maven, nodejs, npm?
-# allow the build container to cache directories for apt
-
 RUN apt-get update && apt-get install -y git maven nodejs npm ant python3-pip \
     # clean up temp directories
 	&& apt-get clean && apt-get purge && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 # Python Modules 
 # -------------------------------------------------
-RUN pip3 install --no-cache-dir  \
+    && pip3 install --no-cache-dir  \
     pandas scipy statsmodels wordcloud numpy seaborn
 
 FROM base AS initialize-env
@@ -51,41 +47,24 @@ WORKDIR $SITE_HOME
 ENV PATH $PATH:$GUS_HOME/bin:$PROJECT_HOME/install/bin
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
-
 # Build Website
 # -------------------------------------------------
 # fix tomcat directory structure; see https://www.topzenith.com/2020/07/http-status-404-not-found-docker-tomcat-image.html
 # modify config and settings files based on ARGS
 # link postgres jdbc driver
-# TODO: config tomcat for HTTPS
-
-FROM initialize-env as build-web
-
 RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     # . == source
     . $PROJECT_HOME/install/bin/gusEnv.bash && \
     # set webapp properties
     cp $PROJECT_HOME/ErythronDBWebsite/Site/config/webapp.prop.sample $GUS_HOME/config/webapp.prop && \
     sed -i "s|@WEBAPP@|$WEBAPP|g" $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@PROJECT_ID@|$PROJECT_ID|g" $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@GOOGLE_ANALYTICS_ID@|$GOOGLE_ANALYTICS_ID|g" $GUS_HOME/config/webapp.prop        
-    # TODO: add production build flag to webapp.prop if $BUILD == "prod"
-
-RUN --mount=type=cache,target=/root/.m2 \
-    bldw ErythronDBWebsite $GUS_HOME/config/webapp.prop && \
+    sed -i "s|@PROJECT_ID@|$PROJECT_ID|g" $GUS_HOME/config/webapp.prop   \
+    # build web
+    && bldw ErythronDBWebsite $GUS_HOME/config/webapp.prop && \
     rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HOME/webapps && \
-    cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/.  \
-    && if [$BUILD = "prod"]; then rm -r $PROJECT_HOME; fi
-
-
-FROM build-web as site-admin-config
-
-# for debug purposes or testing out config; prevents caching of this final stage
-# so that docker build will always rebuild
-# may break in future b/c no guarantee URL will persist. 
-# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-
-RUN echo "Creating/modifying configuration files" && \
+    cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/.  && \
+    rm -r $PROJECT_HOME && \
+    echo "Creating/modifying configuration files" && \
     # secret key file for cookie-based authentication
     cat $SECRET_KEY > $COMMON_DIR/secret/.wdk_key && \
     # model.props (specific for genome build b/c of third-party URLs)
@@ -108,7 +87,7 @@ RUN echo "Creating/modifying configuration files" && \
     sed -i "s|@WEBAPP@|${WEBAPP}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
     # move an older version of log4j needed to generate ontology files/raml but causes version conflicts
     # and method not found issues in the FgpUtil
-    && mkdir $GUS_HOME/lib/java/deprecated && mv $GUS_HOME/lib/java/log4j-1.2.17.jar $GUS_HOME/lib/java/deprecated/. && \
+    mkdir $GUS_HOME/lib/java/deprecated && mv $GUS_HOME/lib/java/log4j-1.2.17.jar $GUS_HOME/lib/java/deprecated/. && \
     # tomcat-users.xml
     cp $GUS_HOME/config/tomcat-users.xml.sample $CATALINA_HOME/conf/tomcat-users.xml && \
     sed -i "s|@TOMCAT_MANAGER_PASSWORD@|$TOMCAT_MANAGER_PASSWORD|g" $CATALINA_HOME/conf/tomcat-users.xml && \

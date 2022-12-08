@@ -19,17 +19,8 @@ services:
   web:
     container_name: erythrondb-web
     build:
-      args:
-        DB_HOST: db
-        BUILD: ${BUILD}
       context: .
       dockerfile: ./web/Dockerfile-with-ARGs
-      target: initialize-env
-      # target: one of base, initialize-env, build-web, site-admin-config
-      # leave target commented out to build entire container; or set targets to build sequentially for dev or debugging
-      # 1. base - create tomcat container, do update and install dependencies
-      # 2. initialize-env - fetches source from github and creates webapp.prop and gus.config and sets gusEnv to enable build
-      # 3. build-web - depends on initialize-env
     depends_on:
       - db
     ports:
