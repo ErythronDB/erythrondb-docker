@@ -3,7 +3,7 @@ version: '3.3'
 services:
   db:
     image: postgres:14
-    container_name: erythrondb-db
+    container_name: database
     restart: always
     ports:
       - ${DB_PORT}:5432
@@ -17,10 +17,10 @@ services:
       - ${DB_DATA}:/var/lib/postgresql/data
 
   web:
-    container_name: erythrondb-web
+    container_name: website
     build:
       context: .
-      dockerfile: ./web/Dockerfile-with-ARGs
+      dockerfile: ./Dockerfile-with-ARGs
     depends_on:
       - db
     ports:

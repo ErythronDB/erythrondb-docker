@@ -66,7 +66,7 @@ RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     rm -r $PROJECT_HOME && \
     echo "Creating/modifying configuration files" && \
     # secret key file for cookie-based authentication
-    cat $SECRET_KEY > $COMMON_DIR/secret/.wdk_key && \
+    cat "placeholder-key" > $COMMON_DIR/secret/.wdk_key && \
     # model.props (specific for genome build b/c of third-party URLs)
     cp $GUS_HOME/config/$PROJECT_ID/model.prop.sample $GUS_HOME/config/$PROJECT_ID/model.prop && \
     sed -i "s|@WEBAPP@|${WEBAPP}|g" $GUS_HOME/config/$PROJECT_ID/model.prop && \
