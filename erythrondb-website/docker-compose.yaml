@@ -2,8 +2,8 @@ version: '3.3'
 
 services:
   db:
-    image: postgres:14
     container_name: database
+    image: postgres:14
     restart: always
     ports:
       - ${DB_PORT}:5432
@@ -26,7 +26,7 @@ services:
     ports:
       - '${TOMCAT_PORT}:8080'
     volumes:
-      - ${LOG}:/usr/local/tomcat/logs
+      - ${TOMCAT_LOG}:/usr/local/tomcat/logs
     # links:
     #  - db
     environment:

@@ -52,6 +52,10 @@ ENV NODE_OPTIONS=--max_old_space_size=4096
 # fix tomcat directory structure; see https://www.topzenith.com/2020/07/http-status-404-not-found-docker-tomcat-image.html
 # modify config and settings files based on ARGS
 # link postgres jdbc driver
+
+# uncomment the following line to troubleshoot issues with the substitution of site configuration variables
+# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
 RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     # . == source
     . $PROJECT_HOME/install/bin/gusEnv.bash && \
@@ -63,10 +67,13 @@ RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     && bldw ErythronDBWebsite $GUS_HOME/config/webapp.prop && \
     rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HOME/webapps && \
     cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/.  && \
-    rm -r $PROJECT_HOME && \
-    echo "Creating/modifying configuration files" && \
+    rm -r $PROJECT_HOME
+
+FROM initialize-env as config
+
+RUN echo "Creating/modifying configuration files" && \
     # secret key file for cookie-based authentication
-    cat "placeholder-key" > $COMMON_DIR/secret/.wdk_key && \
+    echo "placeholder-key" > $COMMON_DIR/secret/.wdk_key && \
     # model.props (specific for genome build b/c of third-party URLs)
     cp $GUS_HOME/config/$PROJECT_ID/model.prop.sample $GUS_HOME/config/$PROJECT_ID/model.prop && \
     sed -i "s|@WEBAPP@|${WEBAPP}|g" $GUS_HOME/config/$PROJECT_ID/model.prop && \
@@ -82,12 +89,10 @@ RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     sed -i "s|@DB_PORT@|${WEB_DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@DB_NAME@|${WEB_DB_NAME}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \ 
     # tomcat-context.xml
+    mkdir -p $CATALINA_HOME/conf/Catalina/localhost && \
     cp $GUS_HOME/config/tomcat-context.xml.sample $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
     sed -i "s|@MODEL@|${PROJECT_ID}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
     sed -i "s|@WEBAPP@|${WEBAPP}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
-    # move an older version of log4j needed to generate ontology files/raml but causes version conflicts
-    # and method not found issues in the FgpUtil
-    mkdir $GUS_HOME/lib/java/deprecated && mv $GUS_HOME/lib/java/log4j-1.2.17.jar $GUS_HOME/lib/java/deprecated/. && \
     # tomcat-users.xml
     cp $GUS_HOME/config/tomcat-users.xml.sample $CATALINA_HOME/conf/tomcat-users.xml && \
     sed -i "s|@TOMCAT_MANAGER_PASSWORD@|$TOMCAT_MANAGER_PASSWORD|g" $CATALINA_HOME/conf/tomcat-users.xml && \
