@@ -67,7 +67,9 @@ Details coming soon
 * Fetch the database dump (`erythrondb.gz`) and save in the $DB_INIT directory
 * Build the database container and initialize the database by executing:
 
-```docker compose up -d db ``` 
+```
+docker compose up -d db
+``` 
 
 or from outside of the `base directory`:
 
@@ -89,7 +91,9 @@ The log should report `database system is ready to accept connections` when the 
 
 Build the website site and start the tomcat application by executing: 
 
-```docker compose up -d web ``` 
+```
+docker compose up -d web
+``` 
 
 or from outside of the `base directory`:
 
