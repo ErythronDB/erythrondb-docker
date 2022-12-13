@@ -53,6 +53,11 @@ to generate a new file `web/Dockerfile-with-ARGs` which is an updated version of
 > **WARNING**: _DO NOT COMMIT the modified `.env`, `site-admin.properties` or `Dockerfile-with-ARGs` FILES TO THE REPOSITORY_ as they will contained database passwords.  Currently both are included in `.gitignore`, but in the case that you accidentally do commit either file, _you should change the database passwords_.
 
 
+### Configuring for HTTPS/SSL
+
+Details coming soon
+
+
 ### Build the Site
 
 #### Set up and initialize the database
@@ -97,7 +102,7 @@ docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up 
 1. Build is taking a long time and appears to have hung. 
 > Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time.  
 
-2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/erythrondb` gives a `404` error
+2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
 > This is most likely due to a problem with the site configuration.
 
    * Review `$TOMCAT_LOG/erythrondb/wdk.log4j` to determine the errors in the configuration file 
