@@ -25,7 +25,7 @@ Edit [erythrondb-website/sample.env](erythrondb-website/sample.env) and save as 
       * **DB_DATA**: target path on host for mounting the PostGreSQL database (store the data); if using Docker Desktop, the host `DB_DATA` target must be a directory or subdirectory for which `file shareing` is enbable
       * **POSTGRES_INIT_USER** and **POSTGRES_INIT_DATABASE**: placeholders for DB admin credentials; needed to initialize the database.  **POSTGRES_INIT_USER** CANNOT be `postgres`
       * **TOMCAT_PORT**: mapped host port for tomcat (default=8080)
-      * **LOG**: target path on host for mounting tomcat log directory; enables logs to be viewed outside of the container; if using Docker Desktop, the host `LOG` target must be a directory or subdirectory for which `file sharing` is enabled 
+      * **TOMCAT_LOG**: target path on host for mounting tomcat log directory; enables logs to be viewed outside of the container; if using Docker Desktop, the host `LOG` target must be a directory or subdirectory for which `file sharing` is enabled 
 
 
 > **NOTE**: You may save the modified `.env` file with a different name or in a different location, but will need to provide the full path to the file to any`docker compose` command using the **`--env-file`** option. e.g.,  `docker compose --env-file ./config/.env.dev up`
@@ -52,16 +52,32 @@ to generate a new file `web/Dockerfile-with-ARGs` which is an updated version of
 
 ### Build the Site
 
-Build the site by executing ```docker compose up -d web```
+#### Set up and initialize the database
 
+
+
+#### Build the website
+
+Build the website site and start the tomcat application by executing: 
+
+```docker compose up -d web ``` 
    
 ## Troubleshooting
-1. Build is taking a long time and appears to have hung during `build-web` stage. 
-> Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time it tries to do the `build-web` target.  We employ `bind mounts` to cache maven dependencies on the host, so re-builds should be faster.
+1. Build is taking a long time and appears to have hung. 
+> Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time.  
 
-2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/genomics` gives a `404` error
+2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/erythrondb` gives a `404` error
 > This is most likely due to a problem with the site configuration.
 
-   * Review `$TOMCAT_LOGS/genomics/wdk.log4j` to determine the errors in the configuration file 
+   * Review `$TOMCAT_LOG/erythrondb/wdk.log4j` to determine the errors in the configuration file 
    * Update `site-admin.properties` and rerun `insertArgs.py` to regenerate the `Dockerfile-with-ARGs` file
    * Uncomment the following line from the `Dockerfile-with-ARGs` file and save updated version to allow the docker build to clear the `site-admin-config` stage build cache, but retain the build cache for the earlier, more time intensive build stages
+ 
+```
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+```
+   * from the base directory run
+```
+docker compose down web
+docker compose up -d web
+```
