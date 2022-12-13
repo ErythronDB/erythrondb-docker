@@ -80,7 +80,7 @@ docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up 
 You can track the database initialization progress using the docker logs as follows:
 
 ```
-docker compose logs --follow --timestamps
+docker compose logs --follow --timestamps | grep database
 ```
 
 The initialization process will end with a series of `ALTER TABLE` commands, followed by `GRANT` and `REVOKE` commands.
