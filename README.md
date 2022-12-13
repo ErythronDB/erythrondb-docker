@@ -4,6 +4,8 @@ Docker build for the ErythronDB Website and Database
 
 > **NOTE**: Recommend using [docker compose](https://docs.docker.com/compose/install/) to build the containers
 
+> **NOTE**: Depending on how `docker compose` is installed on your system, the command may be `docker-compose` instead of `docker compose`
+
 ##  Terms
 
 * **`base directory`**: directory containg `docker-compose.yaml` file for the project (should be `erythrondb-docker/erythrondb-website`)
@@ -21,12 +23,13 @@ Docker build for the ErythronDB Website and Database
 Edit [erythrondb-website/sample.env](erythrondb-website/sample.env) and save as `.env` in the `base directory`.
    * this defines environmental variables for the build environment that are required by `docker-compose.yaml`
    * values to set are as follows:
-      * **DB_INIT**: full path to the ErythronDB database dump; if using Docker Desktop, the host path containing the `DB_INIT`  file must be a directory or subdirectory for which `file shareing` is enabled
-      * **DB_DATA**: target path on host for mounting the PostGreSQL database (store the data); if using Docker Desktop, the host `DB_DATA` target must be a directory or subdirectory for which `file shareing` is enbable
+      * **DB_INIT**: full path to the ErythronDB database dump; if using Docker Desktop, the host path containing the `DB_INIT`  file must be a directory or subdirectory for which `file sharing` is enabled
+      * **DB_DATA**: target path on host for mounting the PostGreSQL database (store the data); if using Docker Desktop, the host `DB_DATA` target must be a directory or subdirectory for which `file sharing` is enbable
       * **POSTGRES_INIT_USER** and **POSTGRES_INIT_DATABASE**: placeholders for DB admin credentials; needed to initialize the database.  **POSTGRES_INIT_USER** CANNOT be `postgres`
       * **TOMCAT_PORT**: mapped host port for tomcat (default=8080)
       * **TOMCAT_LOG**: target path on host for mounting tomcat log directory; enables logs to be viewed outside of the container; if using Docker Desktop, the host `LOG` target must be a directory or subdirectory for which `file sharing` is enabled 
 
+> **NOTE**: the database will **NOT** initialize if the `DB_DATA` directory already exists and has contents.  If you need to reinitialize the database, you will need to first remove the `DB_DATA` target directory
 
 > **NOTE**: You may save the modified `.env` file with a different name or in a different location, but will need to provide the full path to the file to any`docker compose` command using the **`--env-file`** option. e.g.,  `docker compose --env-file ./config/.env.dev up`
 
@@ -54,6 +57,28 @@ to generate a new file `web/Dockerfile-with-ARGs` which is an updated version of
 
 #### Set up and initialize the database
 
+* Create the `DB_INIT` target directory on the host.  If using `Docker Desktop`, make sure `file sharing` is enabled either for the target directory or its parent
+* Create the parent directory for the `DB_DATA` target (e.g., if `DB_DATA=/erythrondb/data/pgdata`, then `mkdir -p /erythrondb/data`).  If using `Docker Desktop`, make sure `file sharing` is enabled either for the parent directory.
+* Fetch the database dump (`erythrondb.gz`) and save in the $DB_INIT directory
+* Build the database container and initialize the database by executing:
+
+```docker compose up -d db ``` 
+
+or from outside of the `base directory`:
+
+```
+docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up -d --build db 
+```
+
+> **NOTE**: you are going to want to wait for the database to finish initializing before starting the web container for the first time.  This may take 30 minutes to a couple of hours depending on the available resources on the host machine.
+
+You can track the database initialization progress using the docker logs as follows:
+
+```
+docker compose logs --follow --timestamps
+```
+
+The initialization process will end with a series of `ALTER TABLE` commands, followed by `GRANT` and `REVOKE` commands.
 
 
 #### Build the website
@@ -61,7 +86,13 @@ to generate a new file `web/Dockerfile-with-ARGs` which is an updated version of
 Build the website site and start the tomcat application by executing: 
 
 ```docker compose up -d web ``` 
-   
+
+or from outside of the `base directory`:
+
+```
+docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up -d --build web 
+```
+
 ## Troubleshooting
 1. Build is taking a long time and appears to have hung. 
 > Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time.  
@@ -79,5 +110,5 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
    * from the base directory run
 ```
 docker compose down web
-docker compose up -d web
+docker compose up -d --build web
 ```
