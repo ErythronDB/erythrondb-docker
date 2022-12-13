@@ -83,8 +83,7 @@ You can track the database initialization progress using the docker logs as foll
 docker compose logs --follow --timestamps | grep database
 ```
 
-The initialization process will end with a series of `ALTER TABLE` commands, followed by `GRANT` and `REVOKE` commands.
-
+The log should report `database system is ready to accept connections` when the database is fully built.
 
 #### Build the website
 
