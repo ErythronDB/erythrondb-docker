@@ -35,14 +35,14 @@ Edit [erythrondb-website/sample.env](erythrondb-website/sample.env) and save as 
 
 ### Set build-time ARGs required by the service `Dockerfile`
 
-#### Edit [erythrondb-website/site-admin.properties.sample](erythrondb-website/site-admin.properties.sample) and save in place as `site-admin.properties`. 
+Edit [erythrondb-website/site-admin.properties.sample](erythrondb-website/site-admin.properties.sample) and save in place as `site-admin.properties`. 
   * this file defines values that are needed to generate the website configuration during build-time, some of which would be security risks if set as environmental variables in the container (e.g., passwords).  
   * the values to set are as follows
     * **WEB_DB_PASSWORD** will be provided as part of a data access request
     * **SITE_ADMIN_EMAIL** email address to which `Contact Us` messages should be sent
     * **TOMCAT_MANAGER_PASSWORD** should be changed from the default.  The user name is `tomcat-admin`
   
-#### Run the [insertArgs](scripts/insertArgs.py) script
+Run the [insertArgs](scripts/insertArgs.py) script
 
    ``` python3 scripts/insertArgs.py -p erythrondb-website/site-admin.properties -d erythrondb-website/Dockerfile ```
 
