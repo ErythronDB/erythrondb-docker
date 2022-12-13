@@ -74,7 +74,7 @@ docker compose up -d db
 or from outside of the `base directory`:
 
 ```
-docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up -d --build db 
+docker compose  -f "<path to base_directory>/docker-compose.yaml" up -d --build db 
 ```
 
 > **NOTE**: you are going to want to wait for the database to finish initializing before starting the web container for the first time.  This may take 30 minutes to a couple of hours depending on the available resources on the host machine.
@@ -98,7 +98,7 @@ docker compose up -d web
 or from outside of the `base directory`:
 
 ```
-docker compose  -f "erythrondb-docker/erythrondb-website/docker-compose.yml" up -d --build web 
+docker compose  -f "<path to base directory>/docker-compose.yaml" up -d --build web 
 ```
 
 ## Troubleshooting
