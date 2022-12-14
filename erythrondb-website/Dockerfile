@@ -7,6 +7,9 @@ FROM tomcat:9.0.65-jdk11-temurin-jammy as base
 ARG WEBAPP=ErythronDB
 ARG PROJECT_ID=ErythronDB
 ARG DB_HOST=db
+ARG DB_PORT
+
+# legacy placeholder
 ARG SECRET_KEY=placeholder-key
 
 ENV SITE_HOME=/www/erythrondb
@@ -53,9 +56,6 @@ ENV NODE_OPTIONS=--max_old_space_size=4096
 # modify config and settings files based on ARGS
 # link postgres jdbc driver
 
-# uncomment the following line to troubleshoot issues with the substitution of site configuration variables
-# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-
 RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     # . == source
     . $PROJECT_HOME/install/bin/gusEnv.bash && \
@@ -70,6 +70,9 @@ RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     rm -r $PROJECT_HOME
 
 FROM initialize-env as config
+
+# uncomment the following line to troubleshoot issues with the substitution of site configuration variables
+# ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 RUN echo "Creating/modifying configuration files" && \
     # secret key file for cookie-based authentication
@@ -86,7 +89,7 @@ RUN echo "Creating/modifying configuration files" && \
     sed -i "s|@DB_USER@|${WEB_DB_USER}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@DB_PASSWORD@|${WEB_DB_PASSWORD}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@DB_HOST@|${DB_HOST}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_PORT@|${WEB_DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
+    sed -i "s|@DB_PORT@|${DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
     sed -i "s|@DB_NAME@|${WEB_DB_NAME}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \ 
     # tomcat-context.xml
     mkdir -p $CATALINA_HOME/conf/Catalina/localhost && \

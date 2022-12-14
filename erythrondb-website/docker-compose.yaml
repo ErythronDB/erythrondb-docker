@@ -10,7 +10,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_INIT_USER}
       POSTGRES_PASSWORD: ${POSTGRES_INIT_PASSWORD}
-      POSTGRES_DB: init-ignore
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_INITDB_ARGS: --auth-host=md5 --auth-local=md5
+      # POSTGRES_DB: init-ignore
     volumes:
       # note - db will not initialize if DB_DATA directory already exists
       - ${DB_INIT}:/docker-entrypoint-initdb.d/init.sql.gz
@@ -21,14 +23,15 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-with-ARGs
+      args:
+        DB_PORT: ${DB_PORT}
+      # target: config
     depends_on:
       - db
     ports:
       - '${TOMCAT_PORT}:8080'
     volumes:
       - ${TOMCAT_LOG}:/usr/local/tomcat/logs
-    # links:
-    #  - db
     environment:
       PG_HOST: 'db'
 
