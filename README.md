@@ -2,9 +2,20 @@
 # ErythronDB Website Docker Build
 Docker build for the ErythronDB Website and Database
 
-> **NOTE**: Recommend using [docker compose](https://docs.docker.com/compose/install/) to build the containers
+## How to request the data
 
+**More information COMING SOON**
+
+## Requirements
+
+* Docker or Docker Desktop
+
+> **NOTE**: Recommend using [docker compose](https://docs.docker.com/compose/install/) to build the containers
 > **NOTE**: Depending on how `docker compose` is installed on your system, the command may be `docker-compose` instead of `docker compose`
+
+* Python 2.7+ (recommend Python 3.x)
+
+> **NOTE**: `python` is only required to run the `insertArgs` script which adds the protected system administration variables to the Dockerfile.  See the [no-python workaround](#no-python) section below for instructions on how to add these values without running the script.
 
 ##  Terms
 
@@ -41,6 +52,7 @@ Edit [erythrondb-website/site-admin.properties.sample](erythrondb-website/site-a
     * **WEB_DB_PASSWORD** will be provided as part of a data access request
     * **SITE_ADMIN_EMAIL** email address to which `Contact Us` messages should be sent
     * **TOMCAT_MANAGER_PASSWORD** should be changed from the default.  The user name is `tomcat-admin`
+    
   
 Run the [insertArgs](scripts/insertArgs.py) script
 
@@ -48,7 +60,15 @@ Run the [insertArgs](scripts/insertArgs.py) script
 
 to generate a new file `web/Dockerfile-with-ARGs` which is an updated version of the `Dockerfile`, with the site admin variables added as 'ARG' instructions.  
 
-> **NOTE**: You may save the modified `.properties` file with a different name or in a different location; just update the file path following the `-p` flag in the `insertArgs.py` command accordingly.
+#### No Python?
+
+If you do not have `python` available on your system, you can simply add these arguments manually.  Edit the `erythrondb-website/Dockerfile` by adding in an ARG line for each site-admin value after the line `FROM tomcat:9.0.65-jdk11-temurin-jammy as base`.  Save the edited file `erythrondb-website/Dockerfile-with_ARGs`.  For example:
+
+```
+FROM tomcat:9.0.65-jdk11-temurin-jammy as base
+
+ARG SITE_ADMIN_EMAIL=me@mail.com
+```
 
 > **WARNING**: _DO NOT COMMIT the modified `.env`, `site-admin.properties` or `Dockerfile-with-ARGs` FILES TO THE REPOSITORY_ as they will contained database passwords.  Currently both are included in `.gitignore`, but in the case that you accidentally do commit either file, _you should change the database passwords_.
 
