@@ -54,7 +54,7 @@ Edit [erythrondb-website/site-admin.properties.sample](erythrondb-website/site-a
     * **TOMCAT_MANAGER_PASSWORD** should be changed from the default.  The user name is `tomcat-admin`
     
   
-Run the [insertArgs](scripts/insertArgs.py) script
+Run the [insertArgs](scripts/insertArgs.py) script from the erythrondb-docker directory
 
    ``` python3 scripts/insertArgs.py -p erythrondb-website/site-admin.properties -d erythrondb-website/Dockerfile ```
 
