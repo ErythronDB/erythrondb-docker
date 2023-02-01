@@ -6,7 +6,7 @@ FROM tomcat:9.0.65-jdk11-temurin-jammy as base
 # ARGs that can be overload from command line or in the docker-compose.yaml
 ARG WEBAPP=ErythronDB
 ARG PROJECT_ID=ErythronDB
-ARG DB_HOST=db
+ARG DB_HOSTNAME=db
 ARG DB_PORT
 
 # legacy placeholder
@@ -16,6 +16,7 @@ ENV SITE_HOME=/www/erythrondb
 ENV COMMON_DIR=/www/common
 ENV GUS_HOME=/www/erythrondb/gus_home
 ENV PROJECT_HOME=/www/erythrondb/project_home
+ENV DB_HOST=${DB_HOST}:${DB_PORT}
 
 # install build dependencies
 RUN apt-get update && apt-get install -y git maven nodejs npm ant python3-pip \
@@ -50,6 +51,8 @@ WORKDIR $SITE_HOME
 ENV PATH $PATH:$GUS_HOME/bin:$PROJECT_HOME/install/bin
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
+ADD site-admin.properties .
+
 # Build Website
 # -------------------------------------------------
 # fix tomcat directory structure; see https://www.topzenith.com/2020/07/http-status-404-not-found-docker-tomcat-image.html
@@ -57,46 +60,23 @@ ENV NODE_OPTIONS=--max_old_space_size=4096
 # link postgres jdbc driver
 
 RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
+    # generate webapp.prop
+    . $PROJECT_HOME/ErythronDBWebsite/Model/bin/generateWebappProps site-admin.properties && \
     # . == source
     . $PROJECT_HOME/install/bin/gusEnv.bash && \
-    # set webapp properties
-    cp $PROJECT_HOME/ErythronDBWebsite/Site/config/webapp.prop.sample $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@WEBAPP@|$WEBAPP|g" $GUS_HOME/config/webapp.prop && \
-    sed -i "s|@PROJECT_ID@|$PROJECT_ID|g" $GUS_HOME/config/webapp.prop   \
     # build web
     && bldw ErythronDBWebsite $GUS_HOME/config/webapp.prop && \
     rm -r $CATALINA_HOME/webapps && mv $CATALINA_HOME/webapps.dist/ $CATALINA_HOME/webapps && \
-    cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/.  && \
-    rm -r $PROJECT_HOME
+    cp $GUS_HOME/lib/java/db_driver/postgresql-*.jar $CATALINA_HOME/lib/. 
 
 FROM initialize-env as config
 
 # uncomment the following line to troubleshoot issues with the substitution of site configuration variables
 # ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
-RUN echo "Creating/modifying configuration files" && \
-    # secret key file for cookie-based authentication
-    echo "placeholder-key" > $COMMON_DIR/secret/.wdk_key && \
-    # model.props (specific for genome build b/c of third-party URLs)
-    cp $GUS_HOME/config/$PROJECT_ID/model.prop.sample $GUS_HOME/config/$PROJECT_ID/model.prop && \
-    sed -i "s|@WEBAPP@|${WEBAPP}|g" $GUS_HOME/config/$PROJECT_ID/model.prop && \
-    sed -i "s|@SITE_ADMIN_EMAIL@|${SITE_ADMIN_EMAIL}|g" $GUS_HOME/config/$PROJECT_ID/model.prop && \
-    sed -i "s|@PROJECT_ID@|${PROJECT_ID}|g" $GUS_HOME/config/$PROJECT_ID/model.prop && \
-    # model-config
-    cp $GUS_HOME/config/model-config.xml.sample $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@MODEL@|${PROJECT_ID}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@SITE_ADMIN_EMAIL@|${SITE_ADMIN_EMAIL}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_USER@|${WEB_DB_USER}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_PASSWORD@|${WEB_DB_PASSWORD}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_HOST@|${DB_HOST}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_PORT@|${DB_PORT}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \
-    sed -i "s|@DB_NAME@|${WEB_DB_NAME}|g" $GUS_HOME/config/$PROJECT_ID/model-config.xml && \ 
-    # tomcat-context.xml
-    mkdir -p $CATALINA_HOME/conf/Catalina/localhost && \
-    cp $GUS_HOME/config/tomcat-context.xml.sample $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
-    sed -i "s|@MODEL@|${PROJECT_ID}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
-    sed -i "s|@WEBAPP@|${WEBAPP}|g" $CATALINA_HOME/conf/Catalina/localhost/${WEBAPP}.xml && \
-    # tomcat-users.xml
-    cp $GUS_HOME/config/tomcat-users.xml.sample $CATALINA_HOME/conf/tomcat-users.xml && \
-    sed -i "s|@TOMCAT_MANAGER_PASSWORD@|$TOMCAT_MANAGER_PASSWORD|g" $CATALINA_HOME/conf/tomcat-users.xml && \
-    cp $GUS_HOME/config/tomcat-manager-context.xml $CATALINA_HOME/webapps/manager/META-INF/context.xml
+# secret key file for cookie-based authentication
+RUN echo "placeholder-key" > $COMMON_DIR/secret/.wdk_key && \
+    # generate site config
+    . $PROJECT_HOME/ErythronDBWebsite/Model/bin/generateSiteConfig site-admin.properties && \
+    # clean up
+    # rm -r $PROJECT_HOME

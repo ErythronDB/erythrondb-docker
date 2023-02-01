@@ -22,7 +22,7 @@ services:
     container_name: website
     build:
       context: .
-      dockerfile: ./Dockerfile-with-ARGs
+      dockerfile: ./Dockerfile
       args:
         DB_PORT: ${DB_PORT}
       # target: config
