@@ -123,7 +123,10 @@ If the `erythrondb-website` container has started successfully, you should be ab
 
   * you can try allocating more memory to `docker` (or to `WSL2` if using Windows).  It may speed things up.
 
-2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
+2.  Website build fails during javascript bundling.  
+  * More RAM is needed.  A minimum of `4.5GB` of RAM is needed to build the website.  Allocate more memory to `docker` (or to `WSL2` if using Windows) and try again.
+
+3. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
 > This is most likely due to a problem with the site configuration.
 
    * Review `$TOMCAT_LOG/erythrondb/wdk.log4j` to determine the errors in the configuration file 
