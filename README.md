@@ -16,7 +16,7 @@ Docker build for the ErythronDB Website and Database
 * Memory / Disk Space
   * a minimum of `4.5GB` RAM is required to build the website.  Once the docker build is complete, the website will run with `2GB` or less of RAM, so you can stop the `erythrondb-website` container, adjust your memory allocations accordingly, and restart.
   * The database container will require `380MB` of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).  
-  * The website container is larger and will require 2-3GB of hard-drive space in the directories where docker images/containers are stored.
+  * The website container is larger and will require `3-4GB` of hard-drive space in the directories where docker images/containers are stored.
   * The instantiated database (location of the target `pgdata` on the host) will utiliize `13-15GB` of disk space.
 
 ##  Terms
