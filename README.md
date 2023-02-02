@@ -56,7 +56,7 @@ Edit [site-admin.properties.sample](site-admin.properties.sample) and save in pl
     * **WEB_DB_PASSWORD** will be provided as part of a data access request
     * **SITE_ADMIN_EMAIL** email address to which `Contact Us` messages should be sent
     * **TOMCAT_MANAGER_PASSWORD** should be changed from the default.  The user name is `tomcat-admin`
-  * Leave all other property values in the file unchanged, unless adding an Apache layer on the host to enable SSL/HTTPS.  See [CORS section below](configuring-for-httpsssl)
+  * Leave all other property values in the file unchanged, unless adding an Apache layer on the host to enable SSL/HTTPS.  See [CORS section below](#configuring-for-httpsssl)
     
 > **WARNING**: _DO NOT COMMIT the modified `.env`, `site-admin.properties` FILES TO THE REPOSITORY_ as they may contained database passwords.  Currently both are included in `.gitignore`, but in the case that you accidentally do commit either file, _you should change the database passwords_ and _let us know_ so we can change the default database passwords in the distributed versions.
 
