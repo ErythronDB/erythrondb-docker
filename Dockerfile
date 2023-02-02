@@ -81,7 +81,4 @@ FROM build-web as config-site
 RUN . $PROJECT_HOME/ErythronDBWebsite/Model/bin/generateSiteConfig && \
     # clean up
     rm -rf $PROJECT_HOME && \
-    rm $SITE_ADMIN_PROPERTIES_FILE && unset SITE_ADMIN_PROPERTIES_FILE && \
-    # change permissions of log directories
-    chmod -R 777 $CATALINA_HOME/logs
-
+    rm $SITE_ADMIN_PROPERTIES_FILE && unset SITE_ADMIN_PROPERTIES_FILE 
