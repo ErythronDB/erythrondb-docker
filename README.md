@@ -16,12 +16,12 @@ Docker build for the ErythronDB Website and Database
 * Memory / Disk Space
   * a minimum of `4.5GB` RAM is required to build the website (so if using `WSL2` layer on Windows, you may need to create a `.wslconfig` file to allocate more memory to the WSL2 layer if your system has 8GB RAM as, by default, the Windows limits the `WSL2` to 50% of the system memory resources).  Once the docker build is complete, the website will run with `2GB` or less of RAM, so you can stop the `erythrondb-website` container, adjust your memory allocations accordingly, and restart the `erythronb-website` container.
   * The database container will require `380MB` of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).  
-  * The website container is larger and will require 3-4GB of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).
+  * The website container is larger and will require 2-3GB of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).
   * The instantiated database (location of the target `pgdata` on the host) will utiliize `13-15GB` of disk space.
 
 ##  Terms
 
-* **`base directory`**: directory containg `docker-compose.yaml` file for the project (`erythrondb-docker` or an alias specifid when cloning from GitHub)
+* **`base directory`**: directory containg `docker-compose.yaml` file for the project (`erythrondb-docker` or an alias specified when cloning from GitHub)
 
 > **NOTE**: with the exception of the `git clone` step, example commands provided below should **all** be run from the `base directory`
 
@@ -45,7 +45,7 @@ Edit [sample.env](sample.env) and save as `.env` in the `base directory`.
 
 > **NOTE 1 - BEST PRACTICES**: Pick a location outside of the code pulled from the repository for data storage; i.e., the target directories for the database init file and the PostGreSQL `pgdata` file should not be subdirectories of the `base directory`.
 
-> **NOTE 2:**: The database will **NOT** initialize if the `DB_DATA` directory already exists and has contents.  If you need to reinitialize the database, you will need to first remove the `DB_DATA` target directory.  For example, if you set `DB_PATH=/erythrondb/data/pgdata`, the path `/erythrondb/data/` should exist on the host, but the target directory `pgdata` should not.   The docker build will create it.  If you need to reinitialize the database, you will need to remove the `pgdata` directory.
+> **NOTE 2**: The database will **NOT** initialize if the `DB_DATA` directory already exists and has contents.  If you need to reinitialize the database, you will need to first remove the `DB_DATA` target directory.  For example, if you set `DB_PATH=/erythrondb/data/pgdata`, the path `/erythrondb/data/` should exist on the host, but the target directory `pgdata` should not.   The docker build will create it.  If you need to reinitialize the database, you will need to remove the `pgdata` directory.
 
 
 ### Set build-time ARGs required by the service `Dockerfile`
@@ -56,7 +56,7 @@ Edit [site-admin.properties.sample](site-admin.properties.sample) and save in pl
     * **WEB_DB_PASSWORD** will be provided as part of a data access request
     * **SITE_ADMIN_EMAIL** email address to which `Contact Us` messages should be sent
     * **TOMCAT_MANAGER_PASSWORD** should be changed from the default.  The user name is `tomcat-admin`
-  * Leave all other property values in the file unchanged, unless adding an Apache layer on the host to enable SSL/HTTPS.  See [CORS section below](configuring-for-HTTPS-SSL)
+  * Leave all other property values in the file unchanged, unless adding an Apache layer on the host to enable SSL/HTTPS.  See [CORS section below](configuring-for-httpsssl)
     
 > **WARNING**: _DO NOT COMMIT the modified `.env`, `site-admin.properties` FILES TO THE REPOSITORY_ as they may contained database passwords.  Currently both are included in `.gitignore`, but in the case that you accidentally do commit either file, _you should change the database passwords_ and _let us know_ so we can change the default database passwords in the distributed versions.
 
@@ -120,6 +120,8 @@ If the `erythrondb-website` container has started successfully, you should be ab
 ## Troubleshooting
 1. Build is taking a long time and appears to have hung. 
 > Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time on a system with limited resources.
+
+  * you can try allocating more memory to `docker` (or to `WSL2` if using Windows).  It may speed things up.
 
 2. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
 > This is most likely due to a problem with the site configuration.
