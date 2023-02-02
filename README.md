@@ -14,9 +14,9 @@ Docker build for the ErythronDB Website and Database
 > **NOTE**: Depending on how `docker compose` is installed on your system, the command may be `docker-compose` instead of `docker compose`
 
 * Memory / Disk Space
-  * a minimum of `4.5GB` RAM is required to build the website (so if using `WSL2` layer on Windows, you may need to create a `.wslconfig` file to allocate more memory to the WSL2 layer if your system has 8GB RAM as, by default, the Windows limits the `WSL2` to 50% of the system memory resources).  Once the docker build is complete, the website will run with `2GB` or less of RAM, so you can stop the `erythrondb-website` container, adjust your memory allocations accordingly, and restart the `erythronb-website` container.
+  * a minimum of `4.5GB` RAM is required to build the website.  Once the docker build is complete, the website will run with `2GB` or less of RAM, so you can stop the `erythrondb-website` container, adjust your memory allocations accordingly, and restart.
   * The database container will require `380MB` of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).  
-  * The website container is larger and will require 2-3GB of hard-drive space in the directories where docker images/containers are stored (usually `/var/lib/docker`).
+  * The website container is larger and will require 2-3GB of hard-drive space in the directories where docker images/containers are stored.
   * The instantiated database (location of the target `pgdata` on the host) will utiliize `13-15GB` of disk space.
 
 ##  Terms
@@ -100,7 +100,8 @@ The log should report `database system is ready to accept connections` when the 
 
 #### Build the website
 
-Build the website site and start the tomcat application by executing: 
+* Create the `TOMCAT_LOG` directory on the host. If using `Docker Desktop`, make sure `file sharing` is enabled either for the target directory or its parent
+* Build the website site and start the tomcat application by executing: 
 
 ```
 docker compose up -d web
@@ -119,12 +120,20 @@ If the `erythrondb-website` container has started successfully, you should be ab
 
 ## Troubleshooting
 1. Build is taking a long time and appears to have hung. 
-> Maven builds within docker builds are known to be very slow due to some limitations on retrieving dependencies from the maven repository (see https://stackoverflow.com/questions/46713288/maven-inside-docker-container-horribly-slow).  The docker build may take 30 minutes or more the first time on a system with limited resources.
+> The docker build may take 30 minutes or more the first time on a system with limited resources.
 
-  * you can try allocating more memory to `docker` (or to `WSL2` if using Windows).  It may speed things up.
+  * Allocating more RAM to `docker` (or to `WSL2` if using Windows).  It may speed things up.
 
 2.  Website build fails during JavaScript bundling.  
   * More RAM is needed.  A minimum of `4.5GB` of RAM is needed to build the website.  Allocate more memory to `docker` (or to `WSL2` if using Windows) and try again.
+
+2. `Accessed denied` or other permissions errors when trying to access the tomcat logs on the host (`TOMCAT_LOG` directory)
+> The log files are owned by `root` user in the docker container.  
+  * If you do not have `root` or `sudo` access on the host machine, run the following command on the host to change the permissions:
+
+```
+docker exec -it erythrondb-web bash -c "chmod -R 777 /usr/local/tomcat/logs"
+```
 
 3. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
 > This is most likely due to a problem with the site configuration.
