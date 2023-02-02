@@ -55,6 +55,7 @@ WORKDIR $SITE_HOME
 ENV PATH $PATH:$GUS_HOME/bin:$PROJECT_HOME/install/bin
 ENV NODE_OPTIONS=--max_old_space_size=4096
 ENV SITE_ADMIN_PROPERTIES_FILE=$SITE_HOME/etc/site-admin.properties
+ENV TOMCAT_HOME=$CATALINA_HOME
 
 RUN cp $PROJECT_HOME/install/gus.config.sample $GUS_HOME/config/gus.config && \
     # . == source
