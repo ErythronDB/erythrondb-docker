@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   db:
-    container_name: database
+    container_name: erythrondb-db
     image: postgres:14
     restart: always
     ports:
@@ -12,20 +12,19 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_INIT_PASSWORD}
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_INITDB_ARGS: --auth-host=md5 --auth-local=md5
-      # POSTGRES_DB: init-ignore
     volumes:
       # note - db will not initialize if DB_DATA directory already exists
       - ${DB_INIT}:/docker-entrypoint-initdb.d/init.sql.gz
       - ${DB_DATA}:/var/lib/postgresql/data
 
   web:
-    container_name: website
+    container_name: erythrondb-web
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
         DB_PORT: ${DB_PORT}
-      # target: config
+      # target: build-web
     depends_on:
       - db
     ports:

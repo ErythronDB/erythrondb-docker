@@ -10,3 +10,8 @@ WEB_DB_PASSWORD=pg-web-user-password
 # tomcat manager
 TOMCAT_MANAGER_PASSWORD=s3cret
 
+# Set the following to http://hostname,https://hostname or http://hostIP,https::hostIP
+# if using an apache ProxyPass/Reverse ProxyPass on the host 
+# to add an SSL layer to the tomcat application and serve the site via HTTPS
+CORS_ALLOWED_ORIGINS=
+
