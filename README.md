@@ -161,24 +161,25 @@ If the `erythrondb-website` container has started successfully, you should be ab
 
 
 ## Troubleshooting
-1. Build is taking a long time and appears to have hung. 
-> The docker build may take 30 minutes or more the first time on a system with limited resources.
+1. **Build is taking a long time** and appears to have hung. 
 
-  * Allocating more RAM to `docker` (or to `WSL2` if using Windows).  It may speed things up.
+   The docker build may take 30 minutes or more the first time on a system with limited resources.  Allocating more RAM to `docker` (or to `WSL2` if using Windows) may speed things up.
 
-2.  Website build fails during JavaScript bundling.  
-  * More RAM is needed.  A minimum of `4.5GB` of RAM is needed to build the website.  Allocate more memory to `docker` (or to `WSL2` if using Windows) and try again.
+2.  **Website build fails** during JavaScript bundling.  
 
-2. `Accessed denied` or other permissions errors when trying to access the tomcat logs on the host (`TOMCAT_LOG` directory)
-> The log files are owned by `root` user in the docker container.  
-  * If you do not have `root` or `sudo` access on the host machine, run the following command on the host to change the permissions:
+    More RAM is needed.  A minimum of `4.5GB` of RAM is needed to build the website.  Allocate more memory to `docker` (or to `WSL2` if using Windows) and try again.
 
-```
-docker exec -it erythrondb-web bash -c "chmod -R 777 /usr/local/tomcat/logs"
-```
+3. **`Accessed denied` or other permissions errors** when trying to access the tomcat logs on the host (`TOMCAT_LOG` directory)
 
-3. tomcat has started succesfully, but `http://localhost:8080/ErythronDB` (or localhost:TOMCAT_PORT) gives a `404` error
-> This is most likely due to a problem with the site configuration.
+   The log files are owned by `root` user in the docker container.  If you do not have `root` or `sudo` access on the host machine, run the following command on the host to change the permissions:
+
+   ```
+   docker exec -it erythrondb-web bash -c "chmod -R 777 /usr/local/tomcat/logs"
+   ```
+
+4. **`http://localhost:8080/ErythronDB` gives a `404` error** (or ht<span>tp://localhost:</span>`TOMCAT_PORT`/ErythronDB)
+
+   This is most likely due to a problem with the site configuration.
 
    * Review `$TOMCAT_LOG/erythrondb/wdk.log4j` to determine the errors in the configuration file 
    * Update `site-admin.properties` 
