@@ -29,7 +29,7 @@ The following citations should be used to acknowledge specific datasets in Eryth
    Wojchowski, D. et al. 2017. ArrayExpress Accession: [E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
 
 
-_EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR)_
+* _EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR)_
 
    Wojchowski, D. et al. EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR).  ErythronDB. **to be updated**
 
