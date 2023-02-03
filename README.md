@@ -9,12 +9,12 @@ The Erythron Database (ErythronDB) was a resource dedicated to facilitating bett
 
 ## Data Use Policy
 
-Any publications using ErythronDB _data_ or _analysis tools_ should cite the following publication:
+Any publications referencing ErythronDB **_records/reports_**, **_search results_** or **_analysis tools_** should cite the following publication:
 
 Kinglsey et al. 2013.  Ontogeny of erythroid gene expression.  
 E-blood: https://doi.org/10.1182/blood-2012-04-422394
 
-The following citations should be used to acknowledge _specific datasets in ErythronDB_.
+The following citations should be used to acknowledge **_specific datasets_** in ErythronDB:
 
 ### Mouse Transcriptomics
 
