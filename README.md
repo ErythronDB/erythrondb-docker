@@ -22,18 +22,17 @@ _Ontogeny of erythroid gene expression_
 
 Kinglsey et al. 2013.  Ontogeny of erythroid gene expression. E-blood: https://doi.org/10.1182/blood-2012-04-422394
 
-[E-MTAB-1035](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1035)
+ArrayExpress Accession: [E-MTAB-1035](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1035)
 
 
 _EPO-regulated targets in murine erythroid progenitors_
 
-**TBD**
-[E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
+Wojchowski, D. et al. 2017. [E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
 
 
 _EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR)_
 
-**TBD**
+Wojchowski, D. et al. EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR).  ErythronDB Record. (to be updated)
 
 
 ### Human Proteomics
@@ -44,9 +43,6 @@ Held MA et al. 2020. Phospho-proteomic discovery of novel signal transducers inc
 
 Held MA et al. 2020. Phospho-PTM proteomic discovery of novel EPO-modulated kinases and phosphatases, including PTPN18 as a positive regulator of EPOR/JAK2 Signaling. Cellular signalling: https://doi.org/10.1016/j.cellsig.2020.109554
 
-
-> Statement of data-use limitations?
-The following secondary use of ErythronDB data is not authorized:
 
 
 ## How to request the data
