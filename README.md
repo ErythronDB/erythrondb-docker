@@ -2,9 +2,51 @@
 # ErythronDB Website Docker Build
 Docker build for the ErythronDB Website and Database
 
+## Data Use Policy
+
+Any publications using ErythronDB _data_ or _analysis tools_ should cite the following publication:
+
+Kinglsey et al. 2013.  Ontogeny of erythroid gene expression.  
+E-blood: https://doi.org/10.1182/blood-2012-04-422394
+
+The following citations should be used to acknowledge specific datasets in ErythronDB.
+
+### Mouse Transcriptomics
+
+_Ontogeny of erythroid gene expression_
+
+Kinglsey et al. 2013.  Ontogeny of erythroid gene expression. E-blood: https://doi.org/10.1182/blood-2012-04-422394
+
+[E-MTAB-1035](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1035)
+
+
+_EPO-regulated targets in murine erythroid progenitors_
+
+**TBD**
+[E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
+
+
+_EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR)_
+
+**TBD**
+
+
+### Human Proteomics
+
+_EPO phosphorylation PTM targets in UT-7epo-E cells_
+
+Held MA et al. 2020. Phospho-proteomic discovery of novel signal transducers including thioredoxin-interacting protein as mediators of erythropoietin-dependent human erythropoiesis. Experimental hematology: https://doi.org/10.1016/j.exphem.2020.03.003
+
+Held MA et al. 2020. Phospho-PTM proteomic discovery of novel EPO-modulated kinases and phosphatases, including PTPN18 as a positive regulator of EPOR/JAK2 Signaling. Cellular signalling: https://doi.org/10.1016/j.cellsig.2020.109554
+
+
+> Statement of data-use limitations?
+The following secondary use of ErythronDB data is not authorized:
+
+
 ## How to request the data
 
-**More information COMING SOON**
+Please contact @fossilfriend.
 
 ## Requirements
 
