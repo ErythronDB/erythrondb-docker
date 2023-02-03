@@ -14,7 +14,7 @@ Any publications using ErythronDB _data_ or _analysis tools_ should cite the fol
 Kinglsey et al. 2013.  Ontogeny of erythroid gene expression.  
 E-blood: https://doi.org/10.1182/blood-2012-04-422394
 
-The following citations should be used to acknowledge specific datasets in ErythronDB.
+The following citations should be used to acknowledge _specific datasets in ErythronDB_.
 
 ### Mouse Transcriptomics
 
