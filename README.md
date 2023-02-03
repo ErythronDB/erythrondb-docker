@@ -51,7 +51,7 @@ The following secondary use of ErythronDB data is not authorized:
 
 ## How to request the data
 
-Please contact @fossilfriend.
+Please contact [@fossilfriend](https://www.github.com/fossilfriend) via an e-mail with the subject line: **ErythronDB Data Request**.
 
 ## Requirements
 
