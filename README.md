@@ -128,7 +128,7 @@ or from outside of the `base directory`:
 docker compose  -f "<path to base_directory>/docker-compose.yaml" up -d --build db 
 ```
 
-> **NOTE**: you are going to want to wait for the database to finish initializing before starting the web container for the first time.  This may take 10-30 minutes depending on the available resources on the host machine.
+> **NOTE**: The **database must finish initializing before starting the web container** for the first time.  This may take 10-30 minutes depending on the available resources on the host machine.
 
 You can track the database initialization progress using the docker logs as follows:
 
