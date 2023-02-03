@@ -177,7 +177,7 @@ If the `erythrondb-website` container has started successfully, you should be ab
 docker exec -it erythrondb-web bash -c "chmod -R 777 /usr/local/tomcat/logs"
 ```
 
-3. tomcat has started succesfully, but `localhost:${TOMCAT_PORT}/ErythronDB` gives a `404` error
+3. tomcat has started succesfully, but `http://localhost:8080/ErythronDB` (or localhost:TOMCAT_PORT) gives a `404` error
 > This is most likely due to a problem with the site configuration.
 
    * Review `$TOMCAT_LOG/erythrondb/wdk.log4j` to determine the errors in the configuration file 
