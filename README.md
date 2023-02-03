@@ -1,6 +1,11 @@
 
 # ErythronDB Website Docker Build
+
 Docker build for the ErythronDB Website and Database
+
+## About ErythronDB
+
+The Erythron Database (ErythronDB) was a resource dedicated to facilitating better understanding of the cellular and molecular underpinnings of mammalian erythropoiesis. For more information about this project, please visit https://cstoeckert.github.io/past-projects/ErythronDB.html.
 
 ## Data Use Policy
 
