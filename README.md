@@ -18,30 +18,29 @@ The following citations should be used to acknowledge specific datasets in Eryth
 
 ### Mouse Transcriptomics
 
-_Ontogeny of erythroid gene expression_
+* _Ontogeny of erythroid gene expression_
 
-Kinglsey et al. 2013.  Ontogeny of erythroid gene expression. E-blood: https://doi.org/10.1182/blood-2012-04-422394
+  Kinglsey et al. 2013.  Ontogeny of erythroid gene expression. E-blood: https://doi.org/10.1182/blood-2012-04-422394 
+  ArrayExpress Accession: [E-MTAB-1035](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1035)
 
-ArrayExpress Accession: [E-MTAB-1035](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1035)
 
+* _EPO-regulated targets in murine erythroid progenitors_
 
-_EPO-regulated targets in murine erythroid progenitors_
-
-Wojchowski, D. et al. 2017. [E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
+   Wojchowski, D. et al. 2017. ArrayExpress Accession: [E-MTAB-5373](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-5373)
 
 
 _EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR)_
 
-Wojchowski, D. et al. EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR).  ErythronDB Record. (to be updated)
+   Wojchowski, D. et al. EPO-regulated targets in murine E1 cells with a truncated erthropoietin receptor (EpoR).  ErythronDB. **to be updated**
 
 
 ### Human Proteomics
 
-_EPO phosphorylation PTM targets in UT-7epo-E cells_
+* _EPO phosphorylation PTM targets in UT-7epo-E cells_
 
-Held MA et al. 2020. Phospho-proteomic discovery of novel signal transducers including thioredoxin-interacting protein as mediators of erythropoietin-dependent human erythropoiesis. Experimental hematology: https://doi.org/10.1016/j.exphem.2020.03.003
+  Held MA et al. 2020. Phospho-proteomic discovery of novel signal transducers including thioredoxin-interacting protein as mediators of erythropoietin-dependent human erythropoiesis. Experimental hematology: https://doi.org/10.1016/j.exphem.2020.03.003
 
-Held MA et al. 2020. Phospho-PTM proteomic discovery of novel EPO-modulated kinases and phosphatases, including PTPN18 as a positive regulator of EPOR/JAK2 Signaling. Cellular signalling: https://doi.org/10.1016/j.cellsig.2020.109554
+  Held MA et al. 2020. Phospho-PTM proteomic discovery of novel EPO-modulated kinases and phosphatases, including PTPN18 as a positive regulator of EPOR/JAK2 Signaling. Cellular signalling: https://doi.org/10.1016/j.cellsig.2020.109554
 
 
 
