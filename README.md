@@ -46,7 +46,7 @@ The following citations should be used to acknowledge **_specific datasets_** in
 
 ## How to request the data
 
-Please contact [@fossilfriend](https://www.github.com/fossilfriend) via an e-mail with the subject line: **ErythronDB Data Request**.
+The data is now available on the Dryad open data publishing platform: https://datadryad.org/stash/dataset/doi:10.5061/dryad.2bvq83bwq
 
 ## Requirements
 
