@@ -187,3 +187,9 @@ If the `erythrondb-website` container has started successfully, you should be ab
    * Run the `docker system prune -a` to remove the build caches (see docker documentation for more specific commands)
    * Rebuild the container
 
+5. **Something else?**
+
+   Please post a question on our [issue tracker](https://github.com/ErythronDB/erythrondb-docker/issues), including the following:
+   
+   * OS (Mac, Windows, Linux)
+   * error message or docker log (run `docker logs erythrondb-db`), when relevant
