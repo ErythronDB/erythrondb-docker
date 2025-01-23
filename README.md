@@ -80,7 +80,8 @@ Edit [sample.env](sample.env) and save as `.env` in the `base directory`.
    * this defines environmental variables for the build environment that are required by `docker-compose.yaml`
    * values to set are as follows:
       * **DB_INIT**: full path to the ErythronDB database dump; if using Docker Desktop, the host path containing the `DB_INIT`  file must be a directory or subdirectory for which `file sharing` is enabled **See Note 1, below**
-      * **DB_DATA**: target path on host for mounting the PostGreSQL database (store the data); if using Docker Desktop, the host `DB_DATA` target must be a directory or subdirectory for which `file sharing` is enabled. **See Notes 1 & 2, below.**  
+      * **DB_DATA**: target path on host for mounting the PostGreSQL database (store the data); if using Docker Desktop, the host `DB_DATA` target must be a directory or subdirectory for which `file sharing` is enabled. **See Notes 1 & 2, below.**
+      * **DB_PORT**: mapped host port for the PostGreSQL database (default=5432)
       * **POSTGRES_INIT_PASSWORD**: placeholder for DB admin credentials; needed to initialize the database.  **NOTE:** `POSTGRES_USER` in the `docker-compose.yaml` file **should not be changed; must be `postgres`**.
       * **TOMCAT_PORT**: mapped host port for tomcat (default=8080)
       * **TOMCAT_LOG**: target path on host for mounting tomcat log directory; enables logs to be viewed outside of the container; if using Docker Desktop, the host `LOG` target must be a directory or subdirectory for which `file sharing` is enabled 
